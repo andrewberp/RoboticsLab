@@ -46,19 +46,18 @@ void checkEncoders() {
     countsRight += encoders.getCountsAndResetRight();
 
     Sl += ((countsLeft - prevLeft) / (CLICKS_PER_ROTATION * GEAR_RATIO) * WHEEL_CIRCUMFERENCE);
-    Sr += ((countsLeft - prevRight) / (CLICKS_PER_ROTATION * GEAR_RATIO) * WHEEL_CIRCUMFERENCE);
+    Sr += ((countsRight - prevRight) / (CLICKS_PER_ROTATION * GEAR_RATIO) * WHEEL_CIRCUMFERENCE);
 
-    int wheelSpeed = 200;
+    int wheelSpeed = 100;
     if(Sl < 30.5) {
+      if (Sl > 20) {
+       wheelSpeed = 100 * ((30 - Sl) / 10);
+        if(wheelSpeed < 20) wheelSpeed = 20; 
+      }
       motors.setSpeeds(wheelSpeed, wheelSpeed);
     }
-      if(Sl > 20) {
-      wheelSpeed = 100 * ((30 - Sl) / 10);
-        if(wheelSpeed < 20) wheelSpeed = 20; {
-
-        }
-      motors.setSpeeds(wheelSpeed, wheelSpeed);
-    }
+      
+    
 
     else {
       motors.setSpeeds(0, 0);
@@ -69,6 +68,8 @@ void checkEncoders() {
     Serial.print(" Right : ");
     Serial.println(Sr);
 
+    prevLeft = countsLeft;
+    prevRight = countsRight; 
     prevMillis = currentMillis;
 
   
